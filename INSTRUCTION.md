@@ -24,8 +24,6 @@ kubectl apply -f deployment.yml
 kubectl apply -f hpa.yml
 ```
 
-> ⚠️ **Namespace note:** `namespace.yml` creates the `todoapp` namespace, but `deployment.yml` and `hpa.yml` use `mateapp` (as required by the task). Pick **one** namespace and make all files consistent before applying. For example, to use `mateapp` everywhere, update `namespace.yml` metadata name and all `namespace:` fields accordingly.
-
 ---
 
 ## 2. Enable Metrics Server (required for HPA)
@@ -46,13 +44,13 @@ minikube addons enable metrics-server
 
 ```bash
 # Expect 2 pods in Running state
-kubectl get pods -n todoapp
+kubectl get pods -n mateapp
 
 # Check deployment status
-kubectl get deployment todoapp -n todoapp
+kubectl get deployment todoapp -n mateapp
 
 # Check HPA (TARGETS column should show real values after ~1 min)
-kubectl get hpa todoapp-hpa -n todoapp
+kubectl get hpa todoapp-hpa -n mateapp
 ```
 
 ---
@@ -61,18 +59,14 @@ kubectl get hpa todoapp-hpa -n todoapp
 
 ### Option A — ClusterIP + Port Forward (quick local access)
 
-Apply the ClusterIP service that is already in the project:
-
 ```bash
 kubectl apply -f clusterIp.yml
-kubectl port-forward svc/todoapp 8080:80 -n todoapp
+kubectl port-forward svc/todoapp 8080:80 -n mateapp
 ```
 
 Then open http://localhost:8080 in your browser.
 
 ### Option B — NodePort (access via cluster node IP)
-
-Apply the NodePort service that is already in the project:
 
 ```bash
 kubectl apply -f nodeport.yml
@@ -87,7 +81,16 @@ To find your node IP:
 ```bash
 kubectl get nodes -o wide
 # minikube shortcut:
-minikube service todoapp -n todoapp
+minikube service todoapp -n mateapp
+```
+
+---
+
+## 5. Clean Up
+
+To remove everything at once:
+```bash
+kubectl delete namespace mateapp
 ```
 
 ---

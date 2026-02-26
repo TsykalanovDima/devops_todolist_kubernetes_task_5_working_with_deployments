@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todoapp
-  namespace: todoapp
+  namespace: mateapp
   labels:
     app: todoapp
 spec:
